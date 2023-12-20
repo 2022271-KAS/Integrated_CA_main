@@ -6,12 +6,18 @@ package integrated_ca_main;
  * Marccus Winicius Nunes Santos - 2022275
  */
 public class Integrated_CA_main {
-
-    /**
-     * @param args the command line arguments
-     */
+    
+    //Main code, where all the pieces come together.
+    //Here we also throw all the necessary exceptions.
     public static void main(String[] args) {
-        // TODO code application logic here
+        
+
+        
+        //Try catch to run the main menu.
+        try{
+        
+            
+        }catch(Exception e){}
     }
     
 }
