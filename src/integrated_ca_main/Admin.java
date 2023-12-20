@@ -165,4 +165,17 @@ public class Admin {
         System.out.println();
     }
     
+    //Method to delete users by inputting their IDs. 
+    public void deleteUser(int userId) throws SQLException {
+
+        //It calls the static method from dbWriter that is a method to drop users from the table in the database.
+        boolean success = DbWriter.deleteUser(userId);
+
+        //It checks and display a message of the result.
+        if (success) {
+            System.out.println("User deleted successfully.");
+        } else {
+            System.out.println("Failed to delete user.");
+        }
+    }   
 }
