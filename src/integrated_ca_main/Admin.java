@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 
 //This is the Admin class that will handle all admin's activities related. 
@@ -81,7 +82,7 @@ public class Admin {
         }
     }
     
-        //Method to modify the admin's info.
+    //Method to modify the admin's info.
     public void modifyAdminInfo() {
         try (
             //It connects to the database.
@@ -142,4 +143,26 @@ public class Admin {
             e.printStackTrace();
         }
     }
+    
+    //Method to list all users with their details already registred in the database.
+    public void listUsers() throws SQLException {
+        //It initializes the dbReader. 
+        DbReader reader = new DbReader();
+        //ArrayList to store and loop to display the users' data
+        ArrayList<User> allUsers = reader.getAllUsers();
+
+        //Displaying user's data with an enhanced loop.
+        for (User user : allUsers) {
+            System.out.println(
+                    "ID: " + user.getId()
+                    + ", First Name: " + user.getFn()
+                    + ", Last Name: " + user.getLn()
+                    + ", Age: " + user.getAge()
+                    + ", Marital Status: " + user.getMs()
+                    + ", Weekly Income: " + user.getWi()
+            );
+        }
+        System.out.println();
+    }
+    
 }
