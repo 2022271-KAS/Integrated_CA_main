@@ -1,5 +1,6 @@
 package integrated_ca_main;
-
+//Imports used.
+import TaxCalculator.TaxCalculator;
 import static integrated_ca_main.DataBase.*;
 import ioutils.IOUtils;
 import java.sql.Connection;
@@ -9,11 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 
-//This is the Admin class that will handle all admin's activities related. 
+//This is the Admin class.
 public class Admin {
-    
+
     //It declares a constant reference to the instance of the dbWriter class so I can use it in this class.
     //It needs to be initialized.
     private final DbWriter writer = new DbWriter();
@@ -21,14 +23,104 @@ public class Admin {
     //IOUtils to let the admin input.
     IOUtils myInput = new IOUtils();
     //Method for the adminMenu.
-    
-    
-    
-    
-    
-    
-    
-    
+    public void adminMenu() {
+
+        //Boolean to control the menu loop.
+        boolean leave = false;
+        do {
+
+            try {
+                System.out.println();
+                //Variable that will decide how the program will respond depending on the admin's choice.
+                //The Admin have many options.
+                int command = myInput.getUserInt("Welcome to the Admin menu! \n1-Modify Own Profile \n2-Create a new user \n3-List all Users \n4-Remove Users \n5-DELETE WHOLE SCHEMA \n6-Tax Calculator \n7-Check previous calculations \n8-Exit");
+                //Switch to deal with the menu's options.
+                switch (command) {
+                    //Case 1 modifies the Admin's profile.
+                    case 1:
+
+                        System.out.println("Follow the instructions to modify your profile.");
+                        //Method used to modify Amdin's info.
+                        modifyAdminInfo();
+
+                        break;
+                    //Case 2 allows the admin to create new users. 
+                    case 2:
+                        
+                        System.out.println("Follow the instructions to create a new user: ");
+                        //Method to create new users. 
+                        createUser();
+
+                        break;
+                    //Case 3 lists all users.
+                    case 3:
+
+                        System.out.println("List of all registred users:");
+                        //Method used to list all users. 
+                        listUsers();
+
+                        break;
+                    //Case 4 allows the admin to delete users by selecting an ID.
+                    case 4:
+
+                        int userId = myInput.getUserInt("Type the ID you want to delete.");
+                        //It uses a method from the dbWriter class to delete users from the database. 
+                        DbWriter.deleteUser(userId);
+
+                        break;
+                    //Case 5 allows the Admin to drop the whole schema and start it from the scratch. 
+                    case 5:
+
+                        //Option to drop Schema, it's good for testing. 
+                        boolean dropSuccess = DbSetUp.dropSchema();
+                        if (dropSuccess) {
+                            System.out.println("Schema dropped successfully.");
+                        } else {
+                            System.out.println("Failed to drop schema.");
+                        }
+                        //It creates a new database after deleting the previous one to avoid database issues.
+                        //It also makes sure to always keep the admin registred in the database.
+                        DbSetUp.setupDB();
+                        System.out.println("Fresh database created.");
+
+                        break;
+                    //Case 6 allows the admin to use the tax calculator.
+                    case 6:
+
+                        //Method to use the TaxCalculator.
+                        TaxCalculator.runTaxCalculator();
+                        System.out.println();
+
+                        break;
+                    //Case 7 allows the admin to check the previous calculations.
+                    case 7:
+                        //***************IT'S NOT FUNCTIONAL!!!*****************//
+                        System.out.println("Previous calculations: ");
+                        int userID = myInput.getUserInt("What ID would you like to check?");
+                        // Display previous calculations for this user.
+                        List<String> userCalculations = TaxCalculator.getCalculationsForUser(userID);
+                            for (String calculation : userCalculations) {
+                        System.out.println(calculation);}
+
+                        break;
+                    //Case 8 allows the admin to exit and go back to the main menu.
+                    case 8:
+
+                        System.out.println("See you again, admin!");
+                        System.out.println("Logged out.");
+                        leave = true;
+                        break;
+                    default:
+                        System.out.println("Something in the Admin menu went wrong!");
+                }//Error message.
+            } catch (Exception e) {
+                System.out.println("Something wrong with the try-catch admin menu!");
+            } finally {
+                System.out.println();
+            }
+        } while (!leave);
+    }
+
     //Method that allows the admin to create new users and add them to the database.
     public static boolean createUser() throws SQLException {
 
@@ -81,7 +173,7 @@ public class Admin {
             }
         }
     }
-    
+
     //Method to modify the admin's info.
     public void modifyAdminInfo() {
         try (
@@ -143,7 +235,7 @@ public class Admin {
             e.printStackTrace();
         }
     }
-    
+
     //Method to list all users with their details already registred in the database.
     public void listUsers() throws SQLException {
         //It initializes the dbReader. 
@@ -164,7 +256,7 @@ public class Admin {
         }
         System.out.println();
     }
-    
+
     //Method to delete users by inputting their IDs. 
     public void deleteUser(int userId) throws SQLException {
 
@@ -177,5 +269,5 @@ public class Admin {
         } else {
             System.out.println("Failed to delete user.");
         }
-    }   
+    }    
 }

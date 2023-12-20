@@ -130,4 +130,17 @@ public class DbSetUp {
         return true; 
     }
     
+    // Method to drop the entire schema
+    public static boolean dropSchema() {
+        try (
+            // Establishes connection.
+            Connection conn = DriverManager.getConnection(DB_BASE_URL, USER, PASSWORD);  Statement stmt = conn.createStatement();) {
+            //It drops the database if it exists.
+            stmt.execute("DROP DATABASE IF EXISTS " + DB_NAME);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

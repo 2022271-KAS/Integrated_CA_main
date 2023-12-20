@@ -1,6 +1,7 @@
 package integrated_ca_main;
 
 //This class is used for writing into the database, it implements the DataBase interface.
+import ioutils.IOUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

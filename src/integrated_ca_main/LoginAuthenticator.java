@@ -1,4 +1,4 @@
-package mainmenu;
+package integrated_ca_main;
 //Imports used.
 import ioutils.IOUtils;
 import java.sql.SQLException;
@@ -16,7 +16,7 @@ public class LoginAuthenticator {
         String passwordLogin = myInput.getUserText2("Enter your password:");
 
         //It runs the dbReader to check the user_credentials tables.
-        dbReader reader = new dbReader();
+        DbReader reader = new DbReader();
 
         //It checks if the entered credentials are for the administrator
         if (reader.validateAdmin(usernameLogin, passwordLogin)) {
@@ -25,7 +25,7 @@ public class LoginAuthenticator {
             //It creates an instance of Admin so we can use the adminMenu method.
             Admin admin = new Admin();
             //It checks for the database everytime the Admin is logging in.
-            boolean setupDB = dbSetUp.setupDB();
+            boolean setupDB = DbSetUp.setupDB();
             //It calls the adminMenu method.
             admin.adminMenu();
             System.out.println();
@@ -37,7 +37,7 @@ public class LoginAuthenticator {
                 //It creates an instance of a regularUser so we can use the userMenu.
                 User regularUser = new User("x");
                 //It checks for the database everytime a regular user logs in.
-                boolean setupDB2 = dbSetUp.setupDB();
+                boolean setupDB2 = DbSetUp.setupDB();
                 //It calls the regularUserMenu method.
                 regularUser.regularUserMenu();           
                 System.out.println();
