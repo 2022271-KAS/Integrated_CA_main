@@ -3,11 +3,7 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-<<<<<<< Updated upstream
             <name>MainMenu</name>
-=======
-            <name>Integrated_CA_main</name>
->>>>>>> Stashed changes
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>
