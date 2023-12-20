@@ -68,4 +68,33 @@ public class DbWriter implements DataBase {
         }
     }
     
+    //Method to delete a user from the database by providing the user ID.
+    public static boolean deleteUser(int userId) throws SQLException {
+        //Way to prevent ADM's id deletion. 
+        try{
+            if(userId !=1){
+        try (
+            //It connects to the database and prepares to make statments in SQL.
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);  
+            Statement stmt = conn.createStatement();) {
+            //Simple SQL query to delete an user from the database by the id.
+            String sql = String.format("DELETE FROM %s WHERE id = %d;", TABLE_NAME, userId);
+            //It executes the command. 
+            stmt.execute(sql);
+            return true;
+        } catch (Exception e) {
+            System.out.println("DeleteUser() - Failed to delete user.");
+            e.printStackTrace();
+            return false;
+        }
+            }else{
+            //Error message, deleting the ADM's id is not allowed.
+            System.out.println("Denied! Can't delete admin's id!");
+            return false;
+            }
+        }catch(Exception e){
+        return false;
+        }
+    }  
+    
 }
