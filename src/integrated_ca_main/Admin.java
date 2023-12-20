@@ -5,6 +5,7 @@ import ioutils.IOUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -80,5 +81,65 @@ public class Admin {
         }
     }
     
-    
+        //Method to modify the admin's info.
+    public void modifyAdminInfo() {
+        try (
+            //It connects to the database.
+            Connection conn = DriverManager.getConnection(DataBase.DB_BASE_URL, DataBase.USER, DataBase.PASSWORD);  
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM userData WHERE id = ?");) {
+            
+            //It uses the "USE" statement to select the database
+            stmt.execute("USE " + DataBase.DB_NAME);
+            //It sets the admin ID to retrieve information
+            stmt.setInt(1, 1);
+
+            try ( ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    //It retrieves admin information from the userData table.
+                    int adminId = rs.getInt("id");
+                    String adminFirstName = rs.getString("first_name");
+                    String adminLastName = rs.getString("last_name");
+                    int adminAge = rs.getInt("age");
+                    String adminMaritalStatus = rs.getString("marital_status");
+                    double adminWeeklyIncome = rs.getDouble("weekly_income");
+                    System.out.println();
+                    //It displays the current admin information.
+                    System.out.println("Current Admin Information:");
+                    System.out.println("First Name: " + adminFirstName);
+                    System.out.println("Last Name: " + adminLastName);
+                    System.out.println("Age: " + adminAge);
+                    System.out.println("Marital Status: " + adminMaritalStatus);
+                    System.out.println("Weekly Income: " + adminWeeklyIncome);
+                    System.out.println();
+
+                    //Then it lers the admin modify the new first and last name.
+                    IOUtils myInput = new IOUtils();
+                    String newFN = myInput.getUserText("Enter new first name:");
+                    String newLN = myInput.getUserText("Enter new last name:");
+                    //We kept the age, marital status and income always set as default. 
+                    int newAge = 0;
+                    String newMaritalStatus = "x";
+                    double newWeeklyIncome = 0.0;
+
+                    //It updates the admin's information in the userData table using a method from the dbWriter class. 
+                    writer.updateAdminInfo(adminId, newFN, newLN, newAge, newMaritalStatus, newWeeklyIncome);
+                    System.out.println();
+                    //Then it displays the updated admin information
+                    System.out.println("Admin Information Updated Successfully:");
+                    System.out.println("First Name: " + newFN);
+                    System.out.println("Last Name: " + newLN);
+                    System.out.println("Age: " + newAge);
+                    System.out.println("Marital Status: " + newMaritalStatus);
+                    System.out.println("Weekly Income: " + newWeeklyIncome);
+                    System.out.println();
+                } else {
+                    //Error message.
+                    System.out.println("Admin not found in the database.");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("ModifyAdminInfo() - Error updating admin's info.");
+            e.printStackTrace();
+        }
+    }
 }
