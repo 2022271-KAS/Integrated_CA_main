@@ -123,4 +123,35 @@ public class DbWriter implements DataBase {
             return false;
         }
     }
+    
+    //Method to update the admin's information including first name, last name, age, marital status, and weekly income.
+public static boolean updateUserInfo(int userId, String newFirstName, String newLastName, int newAge, String newMaritalStatus, double newWeeklyIncome) {
+    // This method updates the regular user info
+    try (
+        //It connects to the database and updates the table.    
+        Connection conn = DriverManager.getConnection(DB_BASE_URL, USER, PASSWORD);
+        PreparedStatement stmt = conn.prepareStatement("UPDATE userData SET first_name = ?, last_name = ?, age = ?, marital_status = ?, weekly_income = ? WHERE id = ?");       
+    ) {       
+        //"USE" statement to select the database
+        stmt.execute("USE " + DataBase.DB_NAME);
+        // Set the admin ID to retrieve information
+        stmt.setInt(1, 1);
+        
+        //It sets the new values in the prepared statement
+        stmt.setString(1, newFirstName);
+        stmt.setString(2, newLastName);
+        stmt.setInt(3, newAge);
+        stmt.setString(4, newMaritalStatus);
+        stmt.setDouble(5, newWeeklyIncome);
+        stmt.setInt(6, userId);
+
+        //It executes the update statement
+        stmt.executeUpdate();
+        //If it all works out, return true.
+        return true;
+    } catch (SQLException e) {
+        System.out.println("UpdateUserInfo() - Error updating user information.");
+        e.printStackTrace();
+        return false;}
+     }   
 }
